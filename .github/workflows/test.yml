@@ -1,43 +1,21 @@
-name: CI
-
 on:
-  push:
-  pull_request:
-  workflow_dispatch:
-
-env:
-  FOUNDRY_PROFILE: ci
+    pull_request:
+      branches:
+        - main
 
 jobs:
-  check:
-    strategy:
-      fail-fast: true
-
-    name: Foundry project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-
-      - name: Show Forge version
-        run: |
-          forge --version
-
-      - name: Run Forge fmt
-        run: |
-          forge fmt --check
-        id: fmt
-
-      - name: Run Forge build
-        run: |
-          forge build --sizes
-        id: build
-
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+    quick-scan:
+      runs-on: ubuntu-latest
+      env:
+        AUDIT_AGENT_TOKEN: ${{ secrets.AUDIT_AGENT_TOKEN }}
+      steps:
+        - uses: actions/checkout@v4
+        - name: Quick Scan
+          run: |
+            curl -X POST \-H "Content-Type: application/json" \-H "X-Api-Key: $AUDIT_AGENT_TOKEN" \-d '{
+                "repositoryURL": "${{ github.event.repository.html_url }}",
+                "branchName": "${{ github.event.pull_request.head.ref }}",
+                "issueNumber": ${{ github.event.number }},
+                "commitHash": "${{ github.event.pull_request.head.sha }}",
+                "contractFiles": ["src/Counter.sol"]
+              }' \https://api.auditagent.staging-nethermind.xyz/api/v1/scanner/quick-scan/launch
