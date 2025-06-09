@@ -18,4 +18,4 @@ jobs:
                 "issueNumber": ${{ github.event.number }},
                 "commitHash": "${{ github.event.pull_request.head.sha }}",
                 "contractFiles": ["src/Counter.sol"]
-              }' \https://api.auditagent.staging-nethermind.xyz/api/v1/scanner/quick-scan/launch
+              }' \http://localhost:8000/api/v1/scanner/quick-scan/launch
