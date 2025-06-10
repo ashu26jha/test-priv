@@ -18,4 +18,4 @@ jobs:
                 "issueNumber": ${{ github.event.number }},
                 "commitHash": "${{ github.event.pull_request.head.sha }}",
                 "contractFiles": ["src/Counter.sol"]
-              }' \https://be66-2405-201-2017-c802-3573-2984-da78-2a82.ngrok-free.app/api/v1/scanner/quick-scan/launch
+              }' \https://04ca-2405-201-2017-c802-ed40-6c9f-606f-c79a.ngrok-free.app/api/v1/scanner/quick-scan/launch
