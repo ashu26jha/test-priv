@@ -1,9 +1,9 @@
-name: Backend Code Quality and Tests
+name: AuditAgent CI Scan
 on:
-    pull_request:
-      branches:
-        - main
-      types: [opened, synchronize, reopened, closed]
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, closed]
 
 jobs:
     quick-scan:
