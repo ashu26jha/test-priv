@@ -32,7 +32,7 @@ jobs:
               cat launch_response.json
               exit 1
             fi
-            SCAN_ID=$(cat launch_response.json | tr -d '\000\0-37' | jq -r '.data.scan_id // empty')
+            SCAN_ID=$(cat launch_response.json | tr -d '00-37' | jq -r '.data.scan_id // empty')
             if [ -z "$SCAN_ID" ]; then
               echo "No relevant changes found. No scan needed."
               exit 0
