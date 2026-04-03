@@ -32,7 +32,7 @@ jobs:
               cat launch_response.json
               exit 1
             fi
-            SCAN_ID=$(cat launch_response.json | tr -d '00-37' | jq -r '.data.scan_id // empty')
+            SCAN_ID=$(cat launch_response.json | tr -d '\000-\037' | jq -r '.data.scan_id // empty')
             if [ -z "$SCAN_ID" ]; then
               echo "No relevant changes found. No scan needed."
               exit 0
@@ -40,7 +40,7 @@ jobs:
             echo "Scan started: $SCAN_ID"
             while true; do
               RESULT_JSON=$(curl -s -f -H "X-Api-Key: $AUDIT_AGENT_TOKEN" "https://f199-2401-4900-889b-8117-788a-b21f-84ef-740.ngrok-free.app/api/v1/scans/ci-result/$SCAN_ID")
-              STATUS=$(echo "$RESULT_JSON" | tr -d '00-37' | jq -r '.data.scan.status // empty')
+              STATUS=$(echo "$RESULT_JSON" | tr -d '\000-\037' | jq -r '.data.scan.status // empty')
               if [ "$STATUS" = "completed" ]; then
                 echo "Scan completed successfully."
                 exit 0
