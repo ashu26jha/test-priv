@@ -16,7 +16,7 @@ jobs:
         - name: Quick Scan
           run: |
             set -e
-            API_URL="https://f199-2401-4900-889b-8117-788a-b21f-84ef-740.ngrok-free.app"
+            API_URL="https://9350-2401-4900-1c1a-6de3-18e8-460d-b29a-29f5.ngrok-free.app"
             HTTP_CODE=$(curl -s -w "%{http_code}" -o launch_response.json -X POST -H "Content-Type: application/json" -H "X-Api-Key: $AUDIT_AGENT_TOKEN" -d '{
               "githubUrl": "${{ github.event.repository.html_url }}",
               "baseBranchName": "${{ github.event.pull_request.base.ref }}",
@@ -26,7 +26,7 @@ jobs:
               "commitHash": "${{ github.event.pull_request.head.sha }}",
               "contractFiles": ["src/**"],
               "language": "solidity"
-            }' "https://f199-2401-4900-889b-8117-788a-b21f-84ef-740.ngrok-free.app/api/v1/scanner/quick-scan/diff-scan")
+            }' "https://9350-2401-4900-1c1a-6de3-18e8-460d-b29a-29f5.ngrok-free.app/api/v1/scanner/quick-scan/diff-scan")
             if [ "$HTTP_CODE" != "202" ]; then
               echo "Launch failed. Expected 202, got $HTTP_CODE."
               cat launch_response.json
@@ -39,7 +39,7 @@ jobs:
             fi
             echo "Scan started: $SCAN_ID"
             while true; do
-              RESULT_JSON=$(curl -s -f -H "X-Api-Key: $AUDIT_AGENT_TOKEN" "https://f199-2401-4900-889b-8117-788a-b21f-84ef-740.ngrok-free.app/api/v1/scans/ci-result/$SCAN_ID")
+              RESULT_JSON=$(curl -s -f -H "X-Api-Key: $AUDIT_AGENT_TOKEN" "https://9350-2401-4900-1c1a-6de3-18e8-460d-b29a-29f5.ngrok-free.app/api/v1/scans/ci-result/$SCAN_ID")
               STATUS=$(echo "$RESULT_JSON" | tr -d '\000-\037' | jq -r '.data.scan.status // empty')
               if [ "$STATUS" = "completed" ]; then
                 echo "Scan completed successfully."
@@ -76,7 +76,7 @@ jobs:
                   "branchName": "${{ github.event.pull_request.head.ref }}",
                   "issueNumber": ${{ github.event.number }},
                   "commitHash": "${{ github.event.pull_request.head.sha }}"
-                }' https://f199-2401-4900-889b-8117-788a-b21f-84ef-740.ngrok-free.app/api/v1/scanner/quick-scan/merge)
+                }' https://9350-2401-4900-1c1a-6de3-18e8-460d-b29a-29f5.ngrok-free.app/api/v1/scanner/quick-scan/merge)
             STATUS_CODE="${RESPONSE: -3}"
             if [ "$STATUS_CODE" != "202" ]; then
               echo "API call failed. Expected 202, got $STATUS_CODE."
